@@ -5,14 +5,12 @@ using namespace std;
 
 Player::Player(const string& playerName) : name(playerName) {}
     
-
+string Player::getName() const {
+    return name;
+}
 
 vector<Card> Player::getHand() const {
     return hand;
-}
-
-string Player::getName() const {
-    return name;
 }
 
 void Player::addCard(const Card& card) {
