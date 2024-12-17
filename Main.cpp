@@ -9,20 +9,27 @@ void playerTurn(Game& game, Player& player) {
 	char choice;
 	do {
 		cout << player.getName() << ", do you want to hit (h) or stay (s)?";
-		cin >> choice;
-		if (choice == 'h') {
-			Card newCard = game.hit(player);
-			player.displayHand();
-			if (game.isBust(player.getHand())) {
-				cout << player.getName() << " Bust! Game over.\n";
-				return;
+		try {
+			cin >> choice;
+			if (choice != 'h' && choice != 's') { 
+				cin.clear();
+
+				throw invalid_argument("Invalid input.Please enter 'h' or 's'."); 
+			}
+			else if (choice == 'h') {
+				Card newCard = game.hit(player);
+				player.displayHand();
+				if (game.isBust(player.getHand())) {
+					cout << player.getName() << " Bust! Game over.\n";
+					return;
+				}
+			}
+			else if (choice == 's') {
+				cout << player.getName() + " stays";
 			}
 		}
-		else if (choice == 's') {
-			cout << player.getName() + "stays";
-		}
-	} while (choice == 'h');
-
+		catch (const invalid_argument& exception) { cout << exception.what() << endl; }
+	} while (choice != 's');
 }
 
 int main() {
@@ -67,8 +74,15 @@ int main() {
 		cout << game.determineWinner(p1) << "\n";
 		cout << game.determineWinner(p2) << "\n";
 
-		cout << "Do you want to play again? (y/n): ";
-		cin >> playAgain;
+		while (true) {
+			cout << "Do you want to play again? (y/n): ";
+			try {
+				cin >> playAgain;
+				if (playAgain != 'y' && playAgain != 'n') throw invalid_argument("Invalid input.Please enter 'y' or 'n'.");
+				else { break; }
+			}
+			catch (const invalid_argument& exception) { cout << exception.what() << endl; }
+		}
 
 	} while (playAgain == 'y');
 
